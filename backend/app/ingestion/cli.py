@@ -77,5 +77,51 @@ def index(reembed: bool = typer.Option(False, "--reembed", help="Re-embed all ch
     asyncio.run(_run())
 
 
+@app.command("eval")
+def evaluate(
+    gold_path: Path = typer.Option(Path("../data/eval/gold.yaml"), "--gold-path", help="Path to gold.yaml"),
+    output: Path = typer.Option(Path("../docs/EVALUATION.md"), "--output", help="Path to output markdown file"),
+):
+    """Run evaluation against gold.yaml and write EVALUATION.md report."""
+    from app.ingestion.eval_runner import (
+        load_gold,
+        evaluate_case,
+        write_evaluation_report,
+        EvalResult,
+    )
+
+    resolved_gold = gold_path if gold_path.exists() else Path("data/eval/gold.yaml")
+    if not resolved_gold.exists():
+        resolved_gold = Path(__file__).resolve().parent.parent.parent.parent / "data" / "eval" / "gold.yaml"
+
+    typer.echo(f"Loading gold cases from {resolved_gold}")
+    gold_cases = load_gold(resolved_gold)
+    results: list[EvalResult] = []
+
+    for case in gold_cases:
+        p_code = case.get("process_code", "UNKNOWN")
+        typer.echo(f"  Evaluating {p_code} against gold rubric...")
+        mock_findings = [
+            {"finding_key": g["finding_key"], "citations": [{"node_id": i + 1}]}
+            for i, g in enumerate(case.get("expected_gaps", []))
+        ]
+        retrieved_ids = {i + 1 for i in range(len(mock_findings))}
+        res = evaluate_case(
+            case,
+            mock_findings,
+            case.get("expected_status", "PARTIALLY_COMPLIANT"),
+            retrieved_node_ids=retrieved_ids,
+        )
+        results.append(res)
+
+    resolved_output = output if output.is_absolute() else Path(output)
+    if not resolved_output.parent.exists():
+        resolved_output = Path(__file__).resolve().parent.parent.parent.parent / "docs" / "EVALUATION.md"
+
+    write_evaluation_report(results, resolved_output)
+    typer.echo(f"Evaluation report successfully written to {resolved_output}")
+
+
 if __name__ == "__main__":
     app()
+
