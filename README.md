@@ -6,7 +6,75 @@
 
 ## 🏛️ System Architecture Summary
 
-The ASCEND platform operates as a hierarchical multi-agent state machine designed for sovereign air-gapped readiness. The visual system architecture below illustrates the end-to-end data flow from user interaction to dual-mode model inference and unified relational storage:
+The ASCEND platform operates as a multi-agent, hierarchical-RAG compliance system designed with dual cloud/on-premise portability. Below is the complete system architecture diagram with bounded component tiers and end-to-end data flow:
+
+```
+                      ┌────────────────────────────────────────────────────────┐
+                      │            ASCEND Web Application (React 19)           │
+                      │  • Bilingual UI (EN / Arabic RTL)   • Live Agent Grid  │
+                      │  • 5-Part Cited Compliance Report   • Feedback Widget  │
+                      └───────────────────────────┬────────────────────────────┘
+                                                  │ HTTP REST / SSE Stream
+                                                  ▼
+                      ┌────────────────────────────────────────────────────────┐
+                      │          FastAPI Compliance Gateway & API              │
+                      │  • SlowAPI Rate Limiting            • SSE Event Stream │
+                      │  • CORS & Middleware                • /health Check    │
+                      └───────────────────────────┬────────────────────────────┘
+                                                  │
+                 ┌────────────────────────────────┴────────────────────────────────┐
+                 │                                                                 │
+                 ▼                                                                 ▼
+┌────────────────────────────────────────────────┐  ┌────────────────────────────────────────────────┐
+│         6-Agent Compliance Coordinator         │  │          Hierarchical Hybrid RAG Engine        │
+│                                                │  │                                                │
+│  ┌──────────────────────────────────────────┐  │  │  ┌──────────────────────────────────────────┐  │
+│  │ 1. Legal Research Agent                  │  │  │  │ pgvector Cosine Distance (<=>)           │  │
+│  └────────────────────┬─────────────────────┘  │  │  └────────────────────┬─────────────────────┘  │
+│                       ▼                        │  │                       │                        │
+│  ┌──────────────────────────────────────────┐  │  │  ┌────────────────────▼─────────────────────┐  │
+│  │ 2. Gap Analysis Agent                    │  │  │  │ PostgreSQL Full-Text Search (BM25)       │  │
+│  └────────────────────┬─────────────────────┘  │  │  └────────────────────┬─────────────────────┘  │
+│                       ▼                        │  │                       │                        │
+│  ┌──────────────────────────────────────────┐  │  │  ┌────────────────────▼─────────────────────┐  │
+│  │ 3. Compliance Status Agent               │◄─┼──┼─►│ Reciprocal Rank Fusion (RRF k=60 Merge)  │  │
+│  └────────────────────┬─────────────────────┘  │  │  └────────────────────┬─────────────────────┘  │
+│                       ▼                        │  │                       │                        │
+│  ┌──────────────────────────────────────────┐  │  │  ┌────────────────────▼─────────────────────┐  │
+│  │ 4. Corrective Action Agent               │  │  │  │ Hierarchy & Breadcrumb Expander          │  │
+│  └────────────────────┬─────────────────────┘  │  │  │ (Parent Chapters & Legal Definitions)    │  │
+│                       ▼                        │  │  └──────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────┐  │  └───────────────────────┬────────────────────────┘
+│  │ 5. Missing KPI Agent                     │  │                          │
+│  └────────────────────┬─────────────────────┘  │                          │
+│                       ▼                        │                          │
+│  ┌──────────────────────────────────────────┐  │                          │
+│  │ 6. Supervisory Review Agent              │  │                          │
+│  │ (Grounding & Citation Verification)      │  │                          │
+│  └────────────────────┬─────────────────────┘  │                          │
+└───────────────────────┼────────────────────────┘                          │
+                        │                                                   │
+                        ▼                                                   ▼
+┌────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         Pluggable Dual-Mode Provider Abstraction                           │
+│                                                                                            │
+│    [ Cloud Mode: Google Vertex AI ]             [ On-Premises Mode: Air-Gapped Local ]     │
+│    • Gemini 1.5 Pro / Flash                     • vLLM / Ollama (Qwen2.5 / Llama 3)        │
+│    • text-embedding-004 (768-dim)               • Local BGE-M3 / TEI (1024-dim)            │
+│    • Discovery Engine Semantic Ranker           • BAAI/bge-reranker-v2-m3 Cross-Encoder    │
+│                                                                                            │
+│    * 100% configuration-driven via .env (Zero cloud leaks verified by AST tests)           │
+└─────────────────────────────────────────────┬──────────────────────────────────────────────┘
+                                              │
+                                              ▼
+┌────────────────────────────────────────────────────────────────────────────────────────────┐
+│                           PostgreSQL 16 + pgvector Unified Store                           │
+│                                                                                            │
+│    • laws & law_nodes (Hierarchical AST)         • financial_processes & process_steps     │
+│    • chunks & chunk_embeddings (Vector Store)    • analyses, findings & audit_events       │
+│    • corrective_actions & kpi_metrics            • human_feedback & review audit logs      │
+└────────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ```mermaid
 flowchart TD
