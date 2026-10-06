@@ -9,3 +9,4 @@ Task 2.2: complete (parsers, hierarchy builder, definition extraction, 9 unit te
 Task 2.3: complete (chunker, indexer, ingestion CLI, DB ingestion verified, 24 unit tests passing)
 Task 2.4: complete (hybrid search with RRF, context expansion, retrieval service, 28 unit tests passing)
 Task 3.1: complete (agent schemas, citation validator, compliance rubric, 35 unit tests passing)
+Task 3.2: complete (agent prompt files for all 6 agents: research, gap analysis, status, corrective action, KPI, review)
