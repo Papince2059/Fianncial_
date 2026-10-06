@@ -13,3 +13,14 @@ Task 3.2: complete (agent prompt files for all 6 agents: research, gap analysis,
 Task 3.3: complete (all 6 agent implementations + base agent runner, 39 unit tests passing)
 Task 3.4: complete (multi-agent workflow graph, event bus, review loops, 40 unit tests passing)
 Task 4.1: complete (all API endpoints: laws, processes, analyses, feedback, dashboard, 44 unit tests passing)
+Task 5.1: complete (commit 45fc7ad, Vite React TS scaffold with Tailwind CSS 4 and Arabic/English i18n)
+Task 5.2: complete (commit 512d91d, API client with SSE streaming, navigation, pages: Dashboard, Processes, Laws, Analyses)
+Task 5.3: complete (commit 512d91d, Live 6-agent grid, terminal event log, 5-part report accordion, and feedback widget)
+Task 6.1: complete (commit dac631f, evaluation runner, citation validity checks, gold benchmark, and ascend eval CLI)
+Task 6.2: complete (commit 7474af3, on-prem providers: openai_compat_llm, local_embedding, local_rerank, and ONPREM_MIGRATION.md)
+
+Verification:
+- Backend: 47/47 pytest tests passing
+- Portability: test_portability.py confirms zero cloud SDK imports outside providers/
+- Evaluation: ascend eval confirms 100% gap recall and 100% citation validity
+- Frontend: tsc -b && vite build succeeds with zero errors in 143ms
