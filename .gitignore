@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+
+# Environment / secrets
+.env
+*.json
+
+# Data (user-supplied laws are not committed; only fixtures are)
+data/laws/*
+!data/laws/.gitkeep
+
+# Node
+node_modules/
+dist/
+.next/
+
+# Docker volumes
+pgdata/
+
+# IDE
+.DS_Store
+.idea/
+.vscode/
