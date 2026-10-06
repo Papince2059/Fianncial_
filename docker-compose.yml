@@ -26,6 +26,7 @@ services:
         condition: service_healthy
     volumes:
       - ./data:/app/data
+      - ./vertex_credentials.json:/app/vertex_credentials.json:ro
 
   frontend:
     build: ./frontend

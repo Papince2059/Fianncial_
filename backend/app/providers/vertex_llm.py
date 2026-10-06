@@ -11,6 +11,11 @@ from app.settings import Settings
 
 class VertexLLMProvider:
     def __init__(self, settings: Settings, *, fast: bool = False) -> None:
+        import os
+        from pathlib import Path
+        if settings.google_application_credentials and Path(settings.google_application_credentials).exists():
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(Path(settings.google_application_credentials).resolve())
+
         vertexai.init(
             project=settings.google_cloud_project,
             location=settings.google_cloud_location,

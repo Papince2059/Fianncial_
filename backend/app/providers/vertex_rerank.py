@@ -7,6 +7,11 @@ from app.settings import Settings
 
 class VertexRerankProvider:
     def __init__(self, settings: Settings) -> None:
+        import os
+        from pathlib import Path
+        if settings.google_application_credentials and Path(settings.google_application_credentials).exists():
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(Path(settings.google_application_credentials).resolve())
+
         self._project = settings.google_cloud_project
         self._model = settings.vertex_rerank_model
         self._client = discoveryengine.RankServiceAsyncClient()

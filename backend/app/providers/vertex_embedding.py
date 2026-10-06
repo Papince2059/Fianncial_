@@ -7,6 +7,11 @@ from app.settings import Settings
 
 class VertexEmbeddingProvider:
     def __init__(self, settings: Settings) -> None:
+        import os
+        from pathlib import Path
+        if settings.google_application_credentials and Path(settings.google_application_credentials).exists():
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(Path(settings.google_application_credentials).resolve())
+
         vertexai.init(project=settings.google_cloud_project, location=settings.google_cloud_location)
         self._model = TextEmbeddingModel.from_pretrained(settings.vertex_embedding_model)
         self.dimension: int = settings.vertex_embedding_dim
