@@ -8,3 +8,4 @@ Task 2.1: complete (synthetic law fixture, process catalog, gold evaluation case
 Task 2.2: complete (parsers, hierarchy builder, definition extraction, 9 unit tests passing)
 Task 2.3: complete (chunker, indexer, ingestion CLI, DB ingestion verified, 24 unit tests passing)
 Task 2.4: complete (hybrid search with RRF, context expansion, retrieval service, 28 unit tests passing)
+Task 3.1: complete (agent schemas, citation validator, compliance rubric, 35 unit tests passing)
