@@ -5,6 +5,44 @@ from pydantic import BaseModel
 from app.providers.base import LLMResult, RerankHit
 
 
+from typing import get_args, get_origin, Literal
+from pydantic_core import PydanticUndefined
+
+
+def _mock_value(ann: type) -> object:
+    origin = get_origin(ann)
+    if origin is Literal:
+        args = get_args(ann)
+        return args[0] if args else "mock"
+    if origin is list:
+        return []
+    if origin is dict:
+        return {}
+    if origin is None and isinstance(ann, type) and issubclass(ann, BaseModel):
+        return _mock_model(ann)
+    if ann is str or ann is Optional[str]:
+        return "mock"
+    if ann is int or ann is Optional[int]:
+        return 0
+    if ann is float or ann is Optional[float]:
+        return 0.0
+    if ann is bool or ann is Optional[bool]:
+        return True
+    return None
+
+
+def _mock_model(model_cls: type[BaseModel]) -> BaseModel:
+    values = {}
+    for name, field_info in model_cls.model_fields.items():
+        if field_info.default is not PydanticUndefined:
+            values[name] = field_info.default
+        elif field_info.default_factory is not None:
+            values[name] = field_info.default_factory()
+        else:
+            values[name] = _mock_value(field_info.annotation)
+    return model_cls.model_validate(values)
+
+
 class FakeLLMProvider:
     """Deterministic fake — returns a valid JSON string matching response_schema if given."""
 
@@ -18,8 +56,11 @@ class FakeLLMProvider:
         max_tokens: int | None = None,
     ) -> LLMResult:
         if response_schema is not None:
-            # Return minimal valid instance as JSON
-            result_text = response_schema.model_construct().model_dump_json()
+            # Return valid instance as JSON
+            try:
+                result_text = _mock_model(response_schema).model_dump_json()
+            except Exception:
+                result_text = response_schema.model_construct().model_dump_json()
         else:
             result_text = "fake-response"
         return LLMResult(text=result_text, input_tokens=10, output_tokens=5, latency_ms=1.0)
