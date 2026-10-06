@@ -4,6 +4,116 @@
 
 ---
 
+## 🏛️ System Architecture Summary
+
+The ASCEND platform operates as a hierarchical multi-agent state machine designed for sovereign air-gapped readiness. The visual system architecture below illustrates the end-to-end data flow from user interaction to dual-mode model inference and unified relational storage:
+
+```mermaid
+flowchart TD
+    subgraph Presentation["1. Presentation & Auditor Interface (React 19)"]
+        UI["Web Client (Vite + Tailwind CSS)"]
+        I18N["Bilingual Engine (English & Arabic RTL)"]
+        GRID["Live 6-Agent Execution Grid"]
+        REP["5-Part Cited Compliance Report"]
+        FEED["Human-in-the-Loop Feedback Widget"]
+        UI --- I18N
+        UI --- GRID
+        UI --- REP
+        UI --- FEED
+    end
+
+    subgraph API["2. API Gateway & Event Streamer (FastAPI)"]
+        REST["REST Endpoints (/api/v1/laws, /processes, /analyses)"]
+        SSE["Server-Sent Events Stream (/api/v1/analyses/{id}/events)"]
+        RATE["SlowAPI Rate Limiter & Security Headers"]
+    end
+
+    subgraph Workflow["3. Multi-Agent Compliance Coordinator"]
+        A1["1. Legal Research Agent"]
+        A2["2. Gap Analysis Agent"]
+        A3["3. Compliance Status Agent"]
+        A4["4. Corrective Action Agent"]
+        A5["5. Missing KPI Agent"]
+        A6["6. Supervisory Review Agent"]
+
+        A1 -->|Statutory Citations| A2
+        A2 -->|Identified Gaps & Severity| A3
+        A3 -->|Compliance Rubric| A4
+        A4 -->|Prioritized Actions| A5
+        A5 -->|KPI & Control Matrix| A6
+        A6 -->|Audited 5-Part Report| REST
+    end
+
+    subgraph Retrieval["4. Hierarchical RAG Retrieval Engine"]
+        VEC["pgvector Cosine Distance (<=>)"]
+        FTS["PostgreSQL Full-Text Search (tsvector/tsquery)"]
+        RRF["Reciprocal Rank Fusion (k=60 Merge)"]
+        EXP["Hierarchy Context Expander (Parent Chapters & Definitions)"]
+        
+        VEC & FTS --> RRF --> EXP
+    end
+
+    subgraph Providers["5. Dual-Mode Provider Abstraction (Zero-Cloud Switch)"]
+        direction TB
+        subgraph Cloud["Cloud Profile: Google Vertex AI"]
+            V_LLM["Gemini 1.5 Pro / Flash"]
+            V_EMB["text-embedding-004 (768d)"]
+            V_RNK["Discovery Engine Semantic Ranker"]
+        end
+        subgraph OnPrem["On-Prem Profile: Air-Gapped Local Stack"]
+            L_LLM["vLLM / OpenAI-Compatible (Qwen2.5 / Llama 3)"]
+            L_EMB["Local BGE-M3 / HuggingFace TEI (1024d)"]
+            L_RNK["BAAI/bge-reranker-v2-m3 Cross-Encoder"]
+        end
+    end
+
+    subgraph Storage["6. Unified Relational & Vector Store (PostgreSQL 16)"]
+        DB_LAWS[("laws & law_nodes")]
+        DB_CHUNKS[("chunks & chunk_embeddings")]
+        DB_PROC[("financial_processes & process_steps")]
+        DB_AUDIT[("analyses, findings & audit_events")]
+        DB_FEED[("human_feedback")]
+    end
+
+    %% Data Flow Links
+    UI -->|HTTP / JSON| REST
+    REST -->|Trigger Audit| Workflow
+    Workflow -.->|Live Agent Status Events| SSE -.-> GRID
+    A1 <-->|Hybrid Retrieval Queries| Retrieval
+    Retrieval <-->|Embeddings & Vector Sim| Providers
+    Retrieval <-->|Hybrid Search & AST| Storage
+    Workflow <-->|LLM Inference & Structured Outputs| Providers
+    Workflow -->|Persist Reports & Findings| Storage
+    FEED -->|Auditor Calibration Notes| REST --> DB_FEED
+
+    classDef presentation fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff;
+    classDef api fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef agents fill:#14532d,stroke:#22c55e,stroke-width:2px,color:#fff;
+    classDef retrieval fill:#581c87,stroke:#a855f7,stroke-width:2px,color:#fff;
+    classDef providers fill:#701a75,stroke:#e879f9,stroke-width:2px,color:#fff;
+    classDef storage fill:#1c1917,stroke:#f59e0b,stroke-width:2px,color:#fff;
+
+    class Presentation presentation;
+    class API api;
+    class Workflow agents;
+    class Retrieval retrieval;
+    class Providers providers;
+    class Storage storage;
+```
+
+### Architectural Highlights
+
+| Layer | Technology | Primary Function | Portability Guarantee |
+|---|---|---|---|
+| **Presentation** | React 19, TypeScript, Tailwind CSS, `react-i18next` | Live agent monitoring, 5-part report visualization, and Arabic RTL support | Pure browser-based SPA; zero cloud lock-in |
+| **API & Streaming** | FastAPI, Uvicorn, SlowAPI, Server-Sent Events (SSE) | Non-blocking execution, real-time agent event streaming, rate-limited REST | Standard Python ASGI runtime |
+| **Workflow Engine** | State Graph Coordinator, Pydantic Schema Validation | Coordinates the 6 compliance agents with automated retries and schema grounding | In-process state graph; zero external queue needed |
+| **Retrieval Engine** | pgvector + PostgreSQL FTS + RRF ($k=60$) | Hybrid lexical and semantic search with chapter and definition context expansion | Built directly into PostgreSQL; no third-party vector SaaS |
+| **Model Inference** | Dual Provider Adapters (`app/providers/`) | Switches between Vertex AI and local vLLM / BGE models via `.env` configuration | Enforced by AST tests (`test_portability.py`) |
+| **Persistent Storage** | PostgreSQL 16 (`NullPool` async engine) | Stores legal AST, processes, chunks, vectors, audit logs, and feedback | Works identically on local Docker, bare metal, or cloud RDS |
+
+---
+
 ## Key Capabilities
 
 1. **Multi-Agent Compliance Network:**
