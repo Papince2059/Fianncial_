@@ -55,6 +55,48 @@ export const AnalysisDetailPage: React.FC = () => {
     ])
   }
 
+  const handleStreamEvent = (evt: StreamEvent) => {
+    const d = evt.data
+    const eventType = evt.event || (d && d.event)
+
+    if (eventType === 'agent_start' || (d && d.status === 'running')) {
+      const agentId = d.agent || 'research'
+      setAgentsState((prev) => ({
+        ...prev,
+        [agentId]: {
+          id: agentId,
+          status: 'running',
+          message: d.message || 'Analyzing statutory rules...',
+        },
+      }))
+      addLog(d.message || `Agent ${agentId} started`, agentId, 'info')
+    } else if (eventType === 'agent_complete' || (d && d.status === 'completed')) {
+      const agentId = d.agent || 'research'
+      setAgentsState((prev) => ({
+        ...prev,
+        [agentId]: {
+          id: agentId,
+          status: 'completed',
+          durationMs: d.duration_ms,
+          message: 'Output verified & validated',
+        },
+      }))
+      addLog(`Agent ${agentId} finished processing`, agentId, 'success')
+    } else if (eventType === 'report_completed' || (d && d.report)) {
+      const finalReport = d.report || d.report_chunk
+      if (finalReport) {
+        setReport(finalReport)
+        addLog('5-Part Statutory Compliance Report generated', 'review', 'success')
+      }
+    } else if (eventType === 'error') {
+      addLog(d.message || 'Agent error encountered', d.agent, 'error')
+    } else {
+      if (d.message) {
+        addLog(d.message, d.agent, 'info')
+      }
+    }
+  }
+
   useEffect(() => {
     if (!id) return
 
@@ -65,7 +107,6 @@ export const AnalysisDetailPage: React.FC = () => {
         setAnalysis(data)
         if (data.report_json) {
           setReport(data.report_json)
-          // Mark all agents completed
           setAgentsState({
             research: { id: 'research', status: 'completed' },
             gap_analysis: { id: 'gap_analysis', status: 'completed' },
@@ -108,48 +149,6 @@ export const AnalysisDetailPage: React.FC = () => {
       }
     }
   }, [id])
-
-  const handleStreamEvent = (evt: StreamEvent) => {
-    const d = evt.data
-    const eventType = evt.event || (d && d.event)
-
-    if (eventType === 'agent_start' || (d && d.status === 'running')) {
-      const agentId = d.agent || 'research'
-      setAgentsState((prev) => ({
-        ...prev,
-        [agentId]: {
-          id: agentId,
-          status: 'running',
-          message: d.message || 'Analyzing statutory rules...',
-        },
-      }))
-      addLog(d.message || `Agent ${agentId} started`, agentId, 'info')
-    } else if (eventType === 'agent_complete' || (d && d.status === 'completed')) {
-      const agentId = d.agent || 'research'
-      setAgentsState((prev) => ({
-        ...prev,
-        [agentId]: {
-          id: agentId,
-          status: 'completed',
-          durationMs: d.duration_ms,
-          message: 'Output verified & validated',
-        },
-      }))
-      addLog(`Agent ${agentId} finished processing`, agentId, 'success')
-    } else if (eventType === 'report_completed' || (d && d.report)) {
-      const finalReport = d.report || d.report_chunk
-      if (finalReport) {
-        setReport(finalReport)
-        addLog('5-Part Statutory Compliance Report generated', 'review', 'success')
-      }
-    } else if (eventType === 'error') {
-      addLog(d.message || 'Agent error encountered', d.agent, 'error')
-    } else {
-      if (d.message) {
-        addLog(d.message, d.agent, 'info')
-      }
-    }
-  }
 
   const handleExportJson = () => {
     if (!report) return

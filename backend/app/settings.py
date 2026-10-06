@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://ascend:ascend@localhost:5432/ascend"
 
     # API
-    allowed_origins: str = "http://localhost:5173"
+    allowed_origins: str = "http://localhost:25173,http://localhost:5173"
     rate_limit_analyses: str = "10/minute"
 
     # App

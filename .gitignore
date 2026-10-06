@@ -9,7 +9,8 @@ __pycache__/
 
 # Environment / secrets
 .env
-*.json
+*credentials*.json
+*secret*.json
 
 # Data (user-supplied laws are not committed; only fixtures are)
 data/laws/*

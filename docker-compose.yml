@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: ascend
       POSTGRES_DB: ascend
     ports:
-      - "5432:5432"
+      - "25432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -20,7 +20,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://ascend:ascend@postgres:5432/ascend
     env_file: .env
     ports:
-      - "8000:8000"
+      - "28000:28000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -30,9 +30,9 @@ services:
   frontend:
     build: ./frontend
     environment:
-      BACKEND_URL: http://backend:8000
+      BACKEND_URL: http://backend:28000
     ports:
-      - "5173:5173"
+      - "25173:25173"
     depends_on:
       - backend
 

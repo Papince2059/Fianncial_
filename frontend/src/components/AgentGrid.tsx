@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Search,
@@ -11,6 +10,7 @@ import {
   Clock,
   AlertCircle,
   Loader2,
+  type LucideIcon,
 } from 'lucide-react'
 
 export interface AgentStatusInfo {
@@ -25,53 +25,61 @@ interface AgentGridProps {
   agentsState: Record<string, AgentStatusInfo>
 }
 
-export const AgentGrid: React.FC<AgentGridProps> = ({ agentsState }) => {
-  const { t } = useTranslation()
+interface AgentConfig {
+  id: string
+  nameKey: string
+  descKey: string
+  icon: LucideIcon
+  color: string
+}
 
-  const AGENTS_CONFIG = [
-    {
-      id: 'research',
-      nameKey: 'agents.research',
-      descKey: 'agents.researchDesc',
-      icon: Search,
-      color: 'from-blue-600/20 to-blue-500/5 text-blue-400 border-blue-500/30',
-    },
-    {
-      id: 'gap_analysis',
-      nameKey: 'agents.gap_analysis',
-      descKey: 'agents.gapAnalysisDesc',
-      icon: GitBranch,
-      color: 'from-amber-600/20 to-amber-500/5 text-amber-400 border-amber-500/30',
-    },
-    {
-      id: 'compliance_status',
-      nameKey: 'agents.compliance_status',
-      descKey: 'agents.complianceStatusDesc',
-      icon: ShieldAlert,
-      color: 'from-purple-600/20 to-purple-500/5 text-purple-400 border-purple-500/30',
-    },
-    {
-      id: 'corrective_action',
-      nameKey: 'agents.corrective_action',
-      descKey: 'agents.correctiveActionDesc',
-      icon: Wrench,
-      color: 'from-emerald-600/20 to-emerald-500/5 text-emerald-400 border-emerald-500/30',
-    },
-    {
-      id: 'missing_kpi',
-      nameKey: 'agents.missing_kpi',
-      descKey: 'agents.missingKpiDesc',
-      icon: Gauge,
-      color: 'from-cyan-600/20 to-cyan-500/5 text-cyan-400 border-cyan-500/30',
-    },
-    {
-      id: 'review',
-      nameKey: 'agents.review',
-      descKey: 'agents.reviewDesc',
-      icon: CheckCheck,
-      color: 'from-indigo-600/20 to-indigo-500/5 text-indigo-400 border-indigo-500/30',
-    },
-  ]
+const AGENTS_CONFIG: AgentConfig[] = [
+  {
+    id: 'research',
+    nameKey: 'agents.research',
+    descKey: 'agents.researchDesc',
+    icon: Search,
+    color: 'from-blue-600/20 to-blue-500/5 text-blue-400 border-blue-500/30',
+  },
+  {
+    id: 'gap_analysis',
+    nameKey: 'agents.gap_analysis',
+    descKey: 'agents.gapAnalysisDesc',
+    icon: GitBranch,
+    color: 'from-amber-600/20 to-amber-500/5 text-amber-400 border-amber-500/30',
+  },
+  {
+    id: 'compliance_status',
+    nameKey: 'agents.compliance_status',
+    descKey: 'agents.complianceStatusDesc',
+    icon: ShieldAlert,
+    color: 'from-purple-600/20 to-purple-500/5 text-purple-400 border-purple-500/30',
+  },
+  {
+    id: 'corrective_action',
+    nameKey: 'agents.corrective_action',
+    descKey: 'agents.correctiveActionDesc',
+    icon: Wrench,
+    color: 'from-emerald-600/20 to-emerald-500/5 text-emerald-400 border-emerald-500/30',
+  },
+  {
+    id: 'missing_kpi',
+    nameKey: 'agents.missing_kpi',
+    descKey: 'agents.missingKpiDesc',
+    icon: Gauge,
+    color: 'from-cyan-600/20 to-cyan-500/5 text-cyan-400 border-cyan-500/30',
+  },
+  {
+    id: 'review',
+    nameKey: 'agents.review',
+    descKey: 'agents.reviewDesc',
+    icon: CheckCheck,
+    color: 'from-indigo-600/20 to-indigo-500/5 text-indigo-400 border-indigo-500/30',
+  },
+]
+
+export const AgentGrid = ({ agentsState }: AgentGridProps) => {
+  const { t } = useTranslation()
 
   const getStatusBadge = (status: AgentStatusInfo['status']) => {
     switch (status) {
@@ -109,7 +117,7 @@ export const AgentGrid: React.FC<AgentGridProps> = ({ agentsState }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {AGENTS_CONFIG.map((agent) => {
-        const info = agentsState[agent.id] || { status: 'idle' }
+        const info = agentsState[agent.id] || { id: agent.id, status: 'idle' }
         const Icon = agent.icon
         const isRunning = info.status === 'running'
         const isCompleted = info.status === 'completed'

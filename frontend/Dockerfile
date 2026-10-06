@@ -7,6 +7,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5173
+EXPOSE 25173
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "25173"]

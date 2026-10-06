@@ -268,7 +268,7 @@ uv run python -m app.ingestion.cli ingest ../data/fixtures/synthetic_law.md --dr
 uv run python -m app.ingestion.cli ingest ../data/fixtures/synthetic_law.md
 
 # Start backend server
-uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+uv run uvicorn app.main:app --host 0.0.0.0 --port 28000 --reload
 ```
 
 ### 3. Frontend Setup
@@ -279,11 +279,11 @@ cd frontend
 # Install dependencies (already initialized)
 npm install
 
-# Start Vite development server
+# Start Vite development server on port 25173
 npm run dev
 ```
 
-Visit [http://localhost:5173](http://localhost:5173) in your browser.
+Visit [http://localhost:25173](http://localhost:25173) in your browser. (API available at [http://localhost:28000](http://localhost:28000), Postgres at `localhost:25432`).
 
 ---
 
