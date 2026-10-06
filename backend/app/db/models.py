@@ -59,9 +59,8 @@ class ChunkEmbedding(Base):
     chunk_id: Mapped[int] = mapped_column(ForeignKey("chunks.id", ondelete="CASCADE"), primary_key=True)
     embedding_model: Mapped[str] = mapped_column(String(128), primary_key=True)
     embedding_dim: Mapped[int] = mapped_column(Integer, nullable=False)
-    # NOTE: Vector dimension is dynamic per model; we store as Vector(1536) max
-    # and rely on embedding_dim column for the actual model dimension.
-    embedding: Mapped[Optional[list[float]]] = mapped_column(Vector(1536))
+    # Dynamic vector dimension per model; unconstrained vector column
+    embedding: Mapped[Optional[list[float]]] = mapped_column(Vector())
     chunk: Mapped["Chunk"] = relationship(back_populates="embeddings")
 
 
