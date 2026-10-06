@@ -1,0 +1,26 @@
+# data/eval/gold.yaml
+cases:
+  - process_id: 1
+    process_code: BGF-001
+    expected_status: PARTIALLY_COMPLIANT
+    expected_gaps:
+      - finding_key: MISS_001
+        kind: missing_step
+        article: "Art.5"
+        description: "No step for SFC endorsement before issuing budget circular"
+        severity: high
+      - finding_key: MISS_002
+        kind: missing_step
+        article: "Art.6"
+        description: "No step to establish internal Budget Preparation Committee"
+        severity: high
+      - finding_key: MISS_003
+        kind: missing_step
+        article: "Art.7"
+        description: "Four core budgeting principles not explicitly embedded in guidelines"
+        severity: medium
+      - finding_key: MISS_004
+        kind: missing_step
+        article: "Art.8"
+        description: "Templates not verified against Director General prescribed forms"
+        severity: medium

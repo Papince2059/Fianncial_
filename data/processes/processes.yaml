@@ -1,0 +1,80 @@
+# data/processes/processes.yaml
+processes:
+  - id: 1
+    level: 3
+    parent_id: null
+    code: BGF-001
+    name_en: "Design Budgetary Guidelines"
+    name_ar: "تصميم المبادئ التوجيهية للميزانية"
+    description: "Establish the annual budgetary framework and guidelines for all government entities."
+    activities:
+      - ordinal: 1
+        text: "Develop budget calendar and key milestones."
+      - ordinal: 2
+        text: "Issue budget call circular."
+      - ordinal: 3
+        text: "Provide templates for budget submission."
+      - ordinal: 4
+        text: "Outline legal and policy constraints."
+
+  - id: 2
+    level: 3
+    parent_id: null
+    code: EXP-001
+    name_en: "Expenditure Control and Monitoring"
+    name_ar: "مراقبة ومتابعة النفقات"
+    description: "Monitor and control government expenditure against approved budgets."
+    activities:
+      - ordinal: 1
+        text: "Review monthly expenditure reports."
+      - ordinal: 2
+        text: "Compare actual spend against approved ceilings."
+      - ordinal: 3
+        text: "Flag overspend and initiate corrective action."
+
+  - id: 3
+    level: 3
+    parent_id: null
+    code: REV-001
+    name_en: "Revenue Forecasting"
+    name_ar: "توقعات الإيرادات"
+    description: "Project annual government revenues for budget planning."
+    activities:
+      - ordinal: 1
+        text: "Collect historical revenue data from all entities."
+      - ordinal: 2
+        text: "Apply forecasting models to project next-year revenue."
+      - ordinal: 3
+        text: "Validate forecasts with senior management."
+
+  - id: 4
+    level: 3
+    parent_id: null
+    code: AUD-001
+    name_en: "Audit Preparation"
+    name_ar: "التحضير للتدقيق"
+    description: "Prepare documentation and evidence for internal and external audits."
+    activities:
+      - ordinal: 1
+        text: "Compile audit evidence files per department."
+      - ordinal: 2
+        text: "Conduct pre-audit self-assessment."
+      - ordinal: 3
+        text: "Submit audit readiness report to senior management."
+
+  - id: 5
+    level: 3
+    parent_id: null
+    code: PRF-001
+    name_en: "Performance Reporting"
+    name_ar: "تقارير الأداء"
+    description: "Produce quarterly performance reports against KPIs."
+    activities:
+      - ordinal: 1
+        text: "Collect KPI data from all departments."
+      - ordinal: 2
+        text: "Compute performance scores against targets."
+      - ordinal: 3
+        text: "Publish quarterly performance report."
+      - ordinal: 4
+        text: "Present findings to senior management."
