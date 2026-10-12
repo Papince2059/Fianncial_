@@ -3,9 +3,12 @@ import pytest
 from pathlib import Path
 from app.ingestion.parsers import parse_file
 
-FIXTURE_LAW = (Path(__file__).parents[3] / "data/fixtures/synthetic_law.md").resolve()
-if not FIXTURE_LAW.exists():
-    FIXTURE_LAW = (Path(__file__).parents[4] / "ascend/data/fixtures/synthetic_law.md").resolve()
+FIXTURE_LAW = next(
+    (p for cand in [Path("/app"), *Path(__file__).resolve().parents]
+     for p in [cand / "data/fixtures/synthetic_law.md", cand / "ascend/data/fixtures/synthetic_law.md"]
+     if p.exists()),
+    Path("data/fixtures/synthetic_law.md"),
+).resolve()
 
 
 def test_parse_markdown_fixture_contains_expected_articles():

@@ -19,7 +19,10 @@ async def run_missing_kpi(
     all_findings = gap_analysis.missing_steps + gap_analysis.deviations + gap_analysis.risks
     valid_keys = {f.finding_key for f in all_findings}
 
-    gaps_text = "\n".join(f"- {f.finding_key}: {f.text}" for f in all_findings)
+    gaps_text = "\n".join(
+        f"- {f.finding_key} [{f.severity.upper()}]: {f.text} (Citations: {', '.join(f'{c.law_code} {c.article_no}' for c in f.citations) if f.citations else 'General Statutory Standard'})"
+        for f in all_findings
+    )
     actions_text = "\n".join(f"- {a.action_key} (addresses {a.addresses_finding_key}): {', '.join(a.steps[:2])}" for a in corrective_actions)
     user_content = f"Gaps:\n{gaps_text}\n\nCorrective Actions:\n{actions_text}"
 

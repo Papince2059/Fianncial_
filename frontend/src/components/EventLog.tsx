@@ -45,12 +45,12 @@ export const EventLog: React.FC<EventLogProps> = ({ logs, onClear }) => {
   }
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-950/80 overflow-hidden shadow-xl">
+    <div className="rounded-xl border border-slate-200 bg-[#151B33] overflow-hidden shadow-xs">
       {/* Header bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#0F1426] border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <Terminal className="w-4 h-4 text-indigo-400" />
-          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300">
+          <Terminal className="w-4 h-4 text-[#DE1B54]" />
+          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-200">
             Agent Event Stream ({logs.length})
           </span>
         </div>
@@ -59,7 +59,7 @@ export const EventLog: React.FC<EventLogProps> = ({ logs, onClear }) => {
           <button
             onClick={() => setAutoScroll(!autoScroll)}
             className={`p-1 rounded text-xs transition-colors ${
-              autoScroll ? 'text-indigo-400 hover:text-indigo-300' : 'text-slate-500'
+              autoScroll ? 'text-[#DE1B54] hover:text-rose-300' : 'text-slate-500'
             }`}
             title={autoScroll ? 'Auto-scroll enabled' : 'Auto-scroll paused'}
           >
@@ -93,7 +93,7 @@ export const EventLog: React.FC<EventLogProps> = ({ logs, onClear }) => {
       {isExpanded && (
         <div
           ref={scrollRef}
-          className="p-3 font-mono text-xs max-h-56 overflow-y-auto space-y-1.5 scrollbar-thin bg-slate-950"
+          className="p-3 font-mono text-xs max-h-56 overflow-y-auto space-y-1.5 scrollbar-thin bg-[#151B33]"
         >
           {logs.length === 0 ? (
             <div className="text-slate-600 italic py-2 text-center">

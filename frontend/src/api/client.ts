@@ -133,6 +133,16 @@ class ApiClient {
     return res.json()
   }
 
+  async getFeedback(analysisId: string): Promise<any[]> {
+    try {
+      const res = await fetch(`${API_BASE}/analyses/${analysisId}/feedback`)
+      if (!res.ok) return []
+      return await res.json()
+    } catch {
+      return []
+    }
+  }
+
   async getDashboardMetrics(): Promise<DashboardMetrics> {
     const res = await fetch(`${API_BASE}/dashboard/metrics`)
     if (!res.ok) throw new Error(`Failed to fetch dashboard metrics: ${res.statusText}`)

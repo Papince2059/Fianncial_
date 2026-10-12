@@ -39,42 +39,42 @@ const AGENTS_CONFIG: AgentConfig[] = [
     nameKey: 'agents.research',
     descKey: 'agents.researchDesc',
     icon: Search,
-    color: 'from-blue-600/20 to-blue-500/5 text-blue-400 border-blue-500/30',
+    color: 'bg-blue-50 text-blue-600 border-blue-200',
   },
   {
     id: 'gap_analysis',
     nameKey: 'agents.gap_analysis',
     descKey: 'agents.gapAnalysisDesc',
     icon: GitBranch,
-    color: 'from-amber-600/20 to-amber-500/5 text-amber-400 border-amber-500/30',
+    color: 'bg-amber-50 text-amber-600 border-amber-200',
   },
   {
     id: 'compliance_status',
     nameKey: 'agents.compliance_status',
     descKey: 'agents.complianceStatusDesc',
     icon: ShieldAlert,
-    color: 'from-purple-600/20 to-purple-500/5 text-purple-400 border-purple-500/30',
+    color: 'bg-purple-50 text-purple-600 border-purple-200',
   },
   {
     id: 'corrective_action',
     nameKey: 'agents.corrective_action',
     descKey: 'agents.correctiveActionDesc',
     icon: Wrench,
-    color: 'from-emerald-600/20 to-emerald-500/5 text-emerald-400 border-emerald-500/30',
+    color: 'bg-emerald-50 text-emerald-600 border-emerald-200',
   },
   {
     id: 'missing_kpi',
     nameKey: 'agents.missing_kpi',
     descKey: 'agents.missingKpiDesc',
     icon: Gauge,
-    color: 'from-cyan-600/20 to-cyan-500/5 text-cyan-400 border-cyan-500/30',
+    color: 'bg-rose-50 text-[#DE1B54] border-rose-200',
   },
   {
     id: 'review',
     nameKey: 'agents.review',
     descKey: 'agents.reviewDesc',
     icon: CheckCheck,
-    color: 'from-indigo-600/20 to-indigo-500/5 text-indigo-400 border-indigo-500/30',
+    color: 'bg-slate-100 text-[#151B33] border-slate-200',
   },
 ]
 
@@ -85,29 +85,29 @@ export const AgentGrid = ({ agentsState }: AgentGridProps) => {
     switch (status) {
       case 'running':
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
-            <Loader2 className="w-3 h-3 animate-spin text-indigo-400" />
+          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-[#DE1B54] border border-rose-200">
+            <Loader2 className="w-3 h-3 animate-spin text-[#DE1B54]" />
             {t('agents.statusRunning')}
           </span>
         )
       case 'completed':
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
             {t('agents.statusCompleted')}
           </span>
         )
       case 'error':
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40">
-            <AlertCircle className="w-3 h-3 text-rose-400" />
+          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+            <AlertCircle className="w-3 h-3 text-rose-600" />
             {t('agents.statusError')}
           </span>
         )
       default:
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700">
-            <Clock className="w-3 h-3 text-slate-500" />
+          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">
+            <Clock className="w-3 h-3 text-slate-400" />
             {t('agents.statusIdle')}
           </span>
         )
@@ -125,38 +125,38 @@ export const AgentGrid = ({ agentsState }: AgentGridProps) => {
         return (
           <div
             key={agent.id}
-            className={`relative rounded-xl p-4 transition-all duration-300 border ${
+            className={`relative rounded-xl p-4 transition-all duration-300 border shadow-xs ${
               isRunning
-                ? 'agent-active border-indigo-500/60 bg-gradient-to-b from-indigo-950/40 to-slate-900/90'
+                ? 'agent-active border-[#DE1B54] bg-rose-50/30'
                 : isCompleted
-                ? 'border-emerald-500/30 bg-slate-900/70'
-                : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
+                ? 'border-emerald-200 bg-white hover:border-emerald-300'
+                : 'border-slate-200 bg-white hover:border-slate-300'
             }`}
           >
             <div className="flex items-start justify-between gap-3 mb-2.5">
               <div className="flex items-center gap-2.5">
                 <div
-                  className={`p-2 rounded-lg bg-gradient-to-br border ${agent.color}`}
+                  className={`p-2 rounded-lg border ${agent.color}`}
                 >
                   <Icon className="w-4 h-4" />
                 </div>
-                <h4 className="font-semibold text-sm text-white">
+                <h4 className="font-semibold text-sm text-[#151B33]">
                   {t(agent.nameKey)}
                 </h4>
               </div>
               {getStatusBadge(info.status)}
             </div>
 
-            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-3">
+            <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-3">
               {t(agent.descKey)}
             </p>
 
-            <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
               <div className="truncate max-w-[180px]">
                 {info.message || (isRunning ? 'Processing...' : 'Awaiting input')}
               </div>
               {info.durationMs !== undefined && (
-                <div className="font-mono text-slate-400">
+                <div className="font-mono text-slate-500">
                   {(info.durationMs / 1000).toFixed(1)}s
                 </div>
               )}

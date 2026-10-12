@@ -28,3 +28,8 @@ pgdata/
 .DS_Store
 .idea/
 .vscode/
+
+# Logs
+*.log
+logs/
+backend/logs/

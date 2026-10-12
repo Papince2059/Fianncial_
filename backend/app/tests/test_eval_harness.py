@@ -1,8 +1,12 @@
 from pathlib import Path
 from app.ingestion.eval_runner import evaluate_case, load_gold
 
-# Locate gold.yaml relative to this test file
-GOLD = Path(__file__).resolve().parent.parent.parent.parent / "data" / "eval" / "gold.yaml"
+GOLD = next(
+    (p for cand in [Path("/app"), *Path(__file__).resolve().parents]
+     for p in [cand / "data/eval/gold.yaml", cand / "ascend/data/eval/gold.yaml"]
+     if p.exists()),
+    Path("data/eval/gold.yaml"),
+).resolve()
 
 def test_gold_yaml_loads():
     assert GOLD.exists(), f"gold.yaml should exist at {GOLD}"

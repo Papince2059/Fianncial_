@@ -18,6 +18,7 @@ services:
     build: ./backend
     environment:
       DATABASE_URL: postgresql+asyncpg://ascend:ascend@postgres:5432/ascend
+      GOOGLE_APPLICATION_CREDENTIALS: /app/vertex_credentials.json
     env_file: .env
     ports:
       - "28000:28000"
@@ -25,7 +26,9 @@ services:
       postgres:
         condition: service_healthy
     volumes:
+      - ./backend/app:/app/app
       - ./data:/app/data
+      - ./logs:/app/logs
       - ./vertex_credentials.json:/app/vertex_credentials.json:ro
 
   frontend:
@@ -36,6 +39,8 @@ services:
       - "25173:25173"
     depends_on:
       - backend
+    volumes:
+      - ./frontend/src:/app/src
 
 volumes:
   pgdata:

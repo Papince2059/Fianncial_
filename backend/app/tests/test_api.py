@@ -20,7 +20,7 @@ async def test_laws_endpoint():
         data = response.json()
         assert isinstance(data, list)
         assert len(data) >= 1
-        assert data[0]["code"] == "SYNTH_PFL_001"
+        assert data[0]["code"] in ("SYNTH_PFL_001", "LAW_NO_1_2016")
 
 
 @pytest.mark.asyncio

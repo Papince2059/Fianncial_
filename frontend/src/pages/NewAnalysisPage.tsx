@@ -69,29 +69,29 @@ export const NewAnalysisPage: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-12">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#151B33] tracking-tight">
           {t('analysis.runAuditTitle')}
         </h1>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-slate-500 mt-1">
           Configure multi-agent parameters and initiate statutory compliance cross-referencing.
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 shadow-xl space-y-6"
+        className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6"
       >
         {/* Process Selection */}
         <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-            <Layers className="w-4 h-4 text-indigo-400" />
+          <label className="text-xs font-bold uppercase tracking-wider text-[#151B33] flex items-center gap-1.5">
+            <Layers className="w-4 h-4 text-[#DE1B54]" />
             <span>{t('analysis.selectProcess')} *</span>
           </label>
           <select
             value={selectedProcessId}
             onChange={(e) => setSelectedProcessId(e.target.value)}
             disabled={loading || submitting}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white text-sm outline-none"
+            className="w-full px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#DE1B54] focus:ring-2 focus:ring-[#DE1B54]/15 text-slate-900 text-sm outline-none shadow-2xs"
           >
             {processes.map((proc) => (
               <option key={proc.id} value={proc.id}>
@@ -100,25 +100,25 @@ export const NewAnalysisPage: React.FC = () => {
             ))}
           </select>
           {selectedProcess && (
-            <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800/80 text-xs text-slate-400 flex items-center justify-between">
-              <span>Department: <strong className="text-slate-200">{selectedProcess.department}</strong></span>
-              <span>Workflow Steps: <strong className="text-indigo-400">{selectedProcess.step_count}</strong></span>
-              <span>Category: <strong className="text-slate-200">{selectedProcess.category}</strong></span>
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+              <span>Department: <strong className="text-slate-900">{selectedProcess.department}</strong></span>
+              <span>Workflow Steps: <strong className="text-[#DE1B54]">{selectedProcess.step_count}</strong></span>
+              <span>Category: <strong className="text-slate-900">{selectedProcess.category}</strong></span>
             </div>
           )}
         </div>
 
         {/* Target Law Corpus Selection */}
         <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-            <Shield className="w-4 h-4 text-indigo-400" />
+          <label className="text-xs font-bold uppercase tracking-wider text-[#151B33] flex items-center gap-1.5">
+            <Shield className="w-4 h-4 text-[#DE1B54]" />
             <span>{t('analysis.selectLaw')}</span>
           </label>
           <select
             value={selectedLawId}
             onChange={(e) => setSelectedLawId(e.target.value)}
             disabled={loading || submitting}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white text-sm outline-none"
+            className="w-full px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#DE1B54] focus:ring-2 focus:ring-[#DE1B54]/15 text-slate-900 text-sm outline-none shadow-2xs"
           >
             <option value="">{t('analysis.allLaws')}</option>
             {laws.map((law) => (
@@ -134,16 +134,16 @@ export const NewAnalysisPage: React.FC = () => {
 
         {/* Audit Depth */}
         <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-indigo-400" />
+          <label className="text-xs font-bold uppercase tracking-wider text-[#151B33] flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-[#DE1B54]" />
             <span>{t('analysis.auditDepth')}</span>
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label
               className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3 ${
                 targetDepth === 'standard'
-                  ? 'border-indigo-500 bg-indigo-500/10'
-                  : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
+                  ? 'border-[#DE1B54] bg-rose-50/40 shadow-xs ring-1 ring-[#DE1B54]/20'
+                  : 'border-slate-200 bg-white hover:border-slate-300'
               }`}
             >
               <input
@@ -152,13 +152,13 @@ export const NewAnalysisPage: React.FC = () => {
                 value="standard"
                 checked={targetDepth === 'standard'}
                 onChange={() => setTargetDepth('standard')}
-                className="mt-1 text-indigo-600 focus:ring-indigo-500"
+                className="mt-1 accent-[#DE1B54]"
               />
               <div>
-                <div className="font-semibold text-xs text-white">
+                <div className="font-bold text-xs text-[#151B33]">
                   {t('analysis.standard')}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
+                <div className="text-[11px] text-slate-500 mt-0.5">
                   Full 6-agent execution with standard hierarchical RAG retrieval and consensus scoring.
                 </div>
               </div>
@@ -167,8 +167,8 @@ export const NewAnalysisPage: React.FC = () => {
             <label
               className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3 ${
                 targetDepth === 'deep'
-                  ? 'border-indigo-500 bg-indigo-500/10'
-                  : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
+                  ? 'border-[#DE1B54] bg-rose-50/40 shadow-xs ring-1 ring-[#DE1B54]/20'
+                  : 'border-slate-200 bg-white hover:border-slate-300'
               }`}
             >
               <input
@@ -177,13 +177,13 @@ export const NewAnalysisPage: React.FC = () => {
                 value="deep"
                 checked={targetDepth === 'deep'}
                 onChange={() => setTargetDepth('deep')}
-                className="mt-1 text-indigo-600 focus:ring-indigo-500"
+                className="mt-1 accent-[#DE1B54]"
               />
               <div>
-                <div className="font-semibold text-xs text-white">
+                <div className="font-bold text-xs text-[#151B33]">
                   {t('analysis.deep')}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
+                <div className="text-[11px] text-slate-500 mt-0.5">
                   Exhaustive cross-referencing with broader context expansion and supervisory review rubric.
                 </div>
               </div>
@@ -192,18 +192,18 @@ export const NewAnalysisPage: React.FC = () => {
         </div>
 
         {error && (
-          <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
+          <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-[#DE1B54] text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Submit button */}
-        <div className="pt-4 border-t border-slate-800 flex items-center justify-end">
+        <div className="pt-4 border-t border-slate-200 flex items-center justify-end">
           <button
             type="submit"
             disabled={submitting || loading}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-xl shadow-indigo-500/25 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white bg-[#DE1B54] hover:bg-[#C21345] shadow-md shadow-[#DE1B54]/20 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Sparkles className="w-4 h-4" />
             <span>

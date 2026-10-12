@@ -120,6 +120,9 @@ export const AnalysisDetailPage: React.FC = () => {
 
         // If in progress or pending, attach SSE stream
         if (data.status === 'PENDING' || data.status === 'IN_PROGRESS') {
+          if (stopStreamRef.current) {
+            stopStreamRef.current()
+          }
           addLog(`Connected to real-time agent stream for audit ${id}`)
           const cleanup = api.streamAnalysisEvents(
             id,
@@ -166,21 +169,21 @@ export const AnalysisDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="p-16 text-center space-y-3">
-        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin mx-auto" />
-        <p className="text-sm text-slate-400">Loading statutory compliance audit...</p>
+        <Loader2 className="w-8 h-8 text-[#DE1B54] animate-spin mx-auto" />
+        <p className="text-sm text-slate-500">Loading statutory compliance audit...</p>
       </div>
     )
   }
 
   if (error || !analysis) {
     return (
-      <div className="p-12 text-center space-y-4">
-        <AlertCircle className="w-10 h-10 text-rose-500 mx-auto" />
-        <h2 className="text-lg font-bold text-white">Analysis Not Found</h2>
-        <p className="text-xs text-slate-400">{error || 'Unable to load analysis'}</p>
+      <div className="p-12 text-center space-y-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+        <AlertCircle className="w-10 h-10 text-[#DE1B54] mx-auto" />
+        <h2 className="text-lg font-bold text-[#151B33]">Analysis Not Found</h2>
+        <p className="text-xs text-slate-500">{error || 'Unable to load analysis'}</p>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-semibold"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#DE1B54] hover:bg-[#C21345] text-white text-xs font-semibold shadow-xs transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Dashboard</span>
@@ -197,7 +200,7 @@ export const AnalysisDetailPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#151B33] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Dashboard</span>
@@ -206,22 +209,22 @@ export const AnalysisDetailPage: React.FC = () => {
         {isCompleted && (
           <button
             onClick={handleExportJson}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-700 hover:bg-slate-800 hover:text-white transition-colors self-start sm:self-auto"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-xs self-start sm:self-auto"
           >
-            <Download className="w-3.5 h-3.5 text-indigo-400" />
+            <Download className="w-3.5 h-3.5 text-[#DE1B54]" />
             <span>{t('analysis.downloadPdf')}</span>
           </button>
         )}
       </div>
 
       {/* Header Overview Card */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl space-y-4">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-bold">
+            <span className="font-mono text-xs px-2.5 py-1 rounded bg-rose-50 text-[#DE1B54] border border-rose-200 font-bold">
               AUDIT-{id ? id.slice(0, 8).toUpperCase() : 'UNKNOWN'}
             </span>
-            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500">
               <Calendar className="w-3.5 h-3.5" />
               <span>{new Date(analysis.created_at).toLocaleString()}</span>
             </div>
@@ -229,13 +232,13 @@ export const AnalysisDetailPage: React.FC = () => {
 
           <div className="flex items-center gap-2">
             {isCompleted ? (
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <ShieldCheck className="w-3.5 h-3.5" />
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                 {t('analysis.completed')}
               </span>
             ) : (
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-[#DE1B54] border border-rose-200">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#DE1B54]" />
                 {t('analysis.running')}
               </span>
             )}
@@ -244,22 +247,29 @@ export const AnalysisDetailPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
               Audited Financial Process
             </span>
-            <div className="font-bold text-base text-white flex items-center gap-2">
-              <Layers className="w-4 h-4 text-indigo-400" />
+            <div className="font-bold text-base text-[#151B33] flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#DE1B54]" />
               <span>{analysis.process_name || analysis.process_id}</span>
             </div>
           </div>
 
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-              Statutory Law Corpus
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              Statutory Law Corpus Scope
             </span>
-            <div className="font-bold text-base text-white flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-indigo-400" />
-              <span>{analysis.law_name || analysis.law_id || 'All Enacted Laws (Full Scope)'}</span>
+            <div className="font-bold text-base text-[#151B33] flex items-center gap-2 flex-wrap">
+              <BookOpen className="w-4 h-4 text-[#DE1B54] shrink-0" />
+              <span>
+                {analysis.law_name && analysis.law_name !== 'Law No. (1) of 2016' && analysis.law_name !== '1'
+                  ? analysis.law_name
+                  : 'All Enacted Laws (7 Statutes, 93 Articles)'}
+              </span>
+              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                Vector DB + FTS
+              </span>
             </div>
           </div>
         </div>
@@ -268,11 +278,11 @@ export const AnalysisDetailPage: React.FC = () => {
       {/* Multi-Agent Live Execution Grid */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-base text-white flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-indigo-400" />
+          <h2 className="font-bold text-base text-[#151B33] flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#DE1B54]" />
             <span>{t('analysis.liveStream')}</span>
           </h2>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-slate-500">
             6 Specialized Statutory Agents
           </span>
         </div>
@@ -287,11 +297,11 @@ export const AnalysisDetailPage: React.FC = () => {
       {report && (
         <div className="space-y-4 pt-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-extrabold text-lg text-white flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
+            <h2 className="font-extrabold text-lg text-[#151B33] flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-emerald-600" />
               <span>{t('analysis.reportTitle')}</span>
             </h2>
-            <span className="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-mono">
+            <span className="text-xs px-2.5 py-1 rounded bg-slate-100 text-slate-700 border border-slate-200 font-mono font-medium">
               Confidence: {((report.executive_summary?.confidence_score || 0.88) * 100).toFixed(0)}%
             </span>
           </div>

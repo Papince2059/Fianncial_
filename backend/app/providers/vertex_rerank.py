@@ -9,8 +9,18 @@ class VertexRerankProvider:
     def __init__(self, settings: Settings) -> None:
         import os
         from pathlib import Path
-        if settings.google_application_credentials and Path(settings.google_application_credentials).exists():
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(Path(settings.google_application_credentials).resolve())
+        candidates = []
+        if settings.google_application_credentials:
+            candidates.append(Path(settings.google_application_credentials))
+        candidates.extend([
+            Path("/app/vertex_credentials.json"),
+            Path("vertex_credentials.json"),
+            Path("../vertex_credentials.json"),
+        ])
+        for c in candidates:
+            if c.exists():
+                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(c.resolve())
+                break
 
         self._project = settings.google_cloud_project
         self._model = settings.vertex_rerank_model

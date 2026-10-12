@@ -135,7 +135,7 @@ class Finding(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     analysis_id: Mapped[int] = mapped_column(ForeignKey("analyses.id", ondelete="CASCADE"))
     part_no: Mapped[int] = mapped_column(Integer, nullable=False)
-    finding_key: Mapped[str] = mapped_column(String(32), nullable=False)
+    finding_key: Mapped[str] = mapped_column(String(128), nullable=False)
     kind: Mapped[Optional[str]] = mapped_column(String(32))
     text: Mapped[str] = mapped_column(Text, nullable=False)
     citations: Mapped[Optional[list]] = mapped_column(JSON)

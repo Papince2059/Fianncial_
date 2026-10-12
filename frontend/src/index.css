@@ -4,11 +4,21 @@
   :root {
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-arabic: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Sutherland Corporate Brand Tokens */
+    --sutherland-navy: #151B33;
+    --sutherland-navy-hover: #1E2540;
+    --sutherland-red: #DE1B54;
+    --sutherland-red-hover: #C21345;
+    --sutherland-red-light: #FDF2F4;
+    --sutherland-bg: #F8FAFC;
+    --sutherland-card: #FFFFFF;
+    --sutherland-border: #E2E8F0;
   }
 
   html {
     font-family: var(--font-sans);
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html[dir="rtl"] {
@@ -16,8 +26,8 @@
   }
 
   body {
-    background-color: #020617;
-    color: #f8fafc;
+    background-color: #F8FAFC;
+    color: #1E293B;
     overflow-x: hidden;
   }
 }
@@ -29,24 +39,23 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #94A3B8;
 }
 
-/* Glassmorphism helpers */
+/* Sutherland Card & Panel helpers */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
 }
 
 .glass-panel-hover {
@@ -54,18 +63,18 @@
 }
 
 .glass-panel-hover:hover {
-  border-color: rgba(99, 102, 241, 0.35);
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.08);
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 25px -5px rgba(21, 27, 51, 0.08), 0 8px 10px -6px rgba(21, 27, 51, 0.04);
   transform: translateY(-1px);
 }
 
 /* Agent pulse animations */
 @keyframes subtle-glow {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 10px rgba(222, 27, 84, 0.15);
   }
   50% {
-    box-shadow: 0 0 25px rgba(99, 102, 241, 0.45);
+    box-shadow: 0 0 20px rgba(222, 27, 84, 0.3);
   }
 }
 
